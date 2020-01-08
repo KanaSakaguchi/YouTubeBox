@@ -1,0 +1,14 @@
+{
+  "name": "youtube-box",
+  "version": "1.0.0",
+  "description": "YouTubeの動画を注文して再生できるサービス",
+  "author": "KanaSakaguchi",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/KanaSakaguchi/YouTubeBox.git"
+  },
+  "license": "ISC",
+  "scripts": {},
+  "dependencies": {},
+  "devDependencies": {}
+}
