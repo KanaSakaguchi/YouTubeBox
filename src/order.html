@@ -14,6 +14,17 @@
         <el-main>
           <section>
             <h2>Order</h2>
+            <el-form label-width="0" ref="searchForm">
+              <el-form-item class="inputKeyword" label="" prop="keyword">
+                <el-input>
+                  <el-button
+                      slot="append"
+                      native-type="submit"
+                      icon="el-icon-search">
+                  </el-button>
+                </el-input>
+              </el-form-item>
+            </el-form>
           </section>
         </el-main>
       </el-container>
