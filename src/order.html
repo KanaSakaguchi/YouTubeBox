@@ -6,7 +6,7 @@
     <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
   </head>
   <body>
-    <div id="app">
+    <div id="app" @submit.prevent>
       <el-container>
         <el-header>
           <h1>YouTube Box</h1>
@@ -14,13 +14,14 @@
         <el-main>
           <section>
             <h2>Order</h2>
-            <el-form label-width="0" ref="searchForm">
+            <el-form label-width="0" ref="searchForm" :model="searchForm">
               <el-form-item class="inputKeyword" label="" prop="keyword">
-                <el-input>
+                <el-input v-model="searchForm.keyword">
                   <el-button
                       slot="append"
                       native-type="submit"
-                      icon="el-icon-search">
+                      icon="el-icon-search"
+                      @click="search">
                   </el-button>
                 </el-input>
               </el-form-item>
@@ -34,7 +35,24 @@
     <script src="https://unpkg.com/element-ui/lib/index.js"></script>
     <script>
       new Vue({
-        el: '#app'
+        el: '#app',
+        data() {
+          return {
+            searchForm: {
+              keyword: ''
+            }
+          }
+        },
+        methods: {
+          search() {
+            google.script.run
+              .withSuccessHandler(this.setSearchResult)
+              .search(this.searchForm.keyword)
+          },
+          setSearchResult(searchResult) {
+            console.log(searchResult)
+          }
+        }
       })
     </script>
   </body>
