@@ -37,7 +37,7 @@
                 </el-input>
               </el-form-item>
             </el-form>
-            <div>
+            <div v-loading="isSearchLoading">
               <el-table
                   :data="searchResult"
                   style="width: 100%"
@@ -78,17 +78,20 @@
             searchForm: {
               keyword: ''
             },
+            isSearchLoading: false,
             searchResult: []
           }
         },
         methods: {
           search() {
+            this.isSearchLoading = true
             google.script.run
               .withSuccessHandler(this.setSearchResult)
               .search(this.searchForm.keyword)
           },
           setSearchResult(searchResult) {
             this.searchResult = searchResult
+            this.isSearchLoading = false
           }
         }
       })
