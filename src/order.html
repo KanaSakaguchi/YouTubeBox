@@ -4,6 +4,17 @@
     <meta charset="UTF-8">
     <base target="_top">
     <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
+    <style>
+      .inputKeyword {
+        margin-bottom: 0;
+      }
+      .channelName .el-link {
+        font-size: small;
+      }
+      .el-link.is-underline:hover:after {
+        bottom: 5px;
+      }
+    </style>
   </head>
   <body>
     <div id="app" @submit.prevent>
@@ -26,6 +37,32 @@
                 </el-input>
               </el-form-item>
             </el-form>
+            <div>
+              <el-table
+                  :data="searchResult"
+                  style="width: 100%"
+                  empty-text="No result."
+                  :show-header="false"
+                  stripe>
+                <el-table-column
+                    width="160">
+                  <template slot-scope="list">
+                    <el-image
+                        :src="list.row.thumbnailUrl"
+                        fit="contain">
+                    </el-image>
+                  </template>
+                </el-table-column>
+                <el-table-column>
+                  <template slot-scope="list">
+                    <el-link :href="list.row.url" type="primary" target="_blank">{{list.row.title}}</el-link><br>
+                    <cite class="channelName">
+                      <el-link :href="list.row.channelUrl" type="info" target="_blank">{{list.row.channelName}}</el-link>
+                    </cite>
+                  </template>
+                </el-table-column>
+              </el-table>
+            </div>
           </section>
         </el-main>
       </el-container>
@@ -40,7 +77,8 @@
           return {
             searchForm: {
               keyword: ''
-            }
+            },
+            searchResult: []
           }
         },
         methods: {
@@ -50,7 +88,7 @@
               .search(this.searchForm.keyword)
           },
           setSearchResult(searchResult) {
-            console.log(searchResult)
+            this.searchResult = searchResult
           }
         }
       })
