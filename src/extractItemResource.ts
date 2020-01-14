@@ -21,8 +21,6 @@ export function extractItemResource_(video: SearchResult): ItemResource {
     itemResource.url = `https://www.youtube.com/watch?v=${video.id.videoId}`
   } else if (video.id.playlistId) {
     itemResource.url = `https://www.youtube.com/playlist?list=${video.id.playlistId}`
-  } else if (video.id.channelId) {
-    itemResource.url = `https://www.youtube.com/channel/${video.id.channelId}`
   }
 
   return itemResource
