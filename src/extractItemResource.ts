@@ -1,9 +1,10 @@
 import SearchResult = GoogleAppsScript.YouTube.Schema.SearchResult
 import Video = GoogleAppsScript.YouTube.Schema.Video
+import Playlist = GoogleAppsScript.YouTube.Schema.Playlist
 
 enum ItemType {
   VIDEO = 'video',
-  PLAY_LIST = 'playlist'
+  PLAYLIST = 'playlist'
 }
 
 export interface ItemResource {
@@ -34,7 +35,7 @@ export function extractItemResource_(video: SearchResult): ItemResource {
     itemResource.url = `https://www.youtube.com/watch?v=${itemResource.id}`
   } else if (video.id.playlistId) {
     itemResource.id = video.id.playlistId
-    itemResource.type = ItemType.PLAY_LIST
+    itemResource.type = ItemType.PLAYLIST
     itemResource.url = `https://www.youtube.com/playlist?list=${itemResource.id}`
   }
 
@@ -51,6 +52,19 @@ export function extractVideoResource_(video: Video): ItemResource {
     videoLength: exchangeTime_(video.contentDetails.duration),
     channelName: video.snippet.channelTitle,
     channelUrl: `https://www.youtube.com/channel/${video.snippet.channelId}`
+  }
+}
+
+export function extractPlaylistResource_(playlist: Playlist): ItemResource {
+  return {
+    id: playlist.id,
+    type: ItemType.PLAYLIST,
+    url: `https://www.youtube.com/playlist?list=${playlist.id}`,
+    title: playlist.snippet.title,
+    thumbnailUrl: playlist.snippet.thumbnails.default.url,
+    videoLength: `${playlist.contentDetails.itemCount} videos`,
+    channelName: playlist.snippet.channelTitle,
+    channelUrl: `https://www.youtube.com/channel/${playlist.snippet.channelId}`
   }
 }
 

@@ -1,6 +1,11 @@
 import SearchListResponse = GoogleAppsScript.YouTube.Schema.SearchListResponse
 import SearchResult = GoogleAppsScript.YouTube.Schema.SearchResult
-import { extractItemResource_, extractVideoResource_, ItemResource } from './extractItemResource'
+import {
+  extractItemResource_,
+  extractPlaylistResource_,
+  extractVideoResource_,
+  ItemResource
+} from './extractItemResource'
 
 function search(keyword: string): ItemResource[] {
   const result: SearchListResponse = YouTube.Search.list('id,snippet',
@@ -21,4 +26,15 @@ function getVideoResource(videoId: string): ItemResource {
   }
 
   return extractVideoResource_(video)
+}
+
+function getPlaylistResource(playlistId: string): ItemResource {
+  const playlist = YouTube.Playlists.list('id,snippet,contentDetails,status', {
+    id: playlistId
+  }).items[0]
+  if (!playlist) {
+    throw new Error('Failed to get play list resource.')
+  }
+
+  return extractPlaylistResource_(playlist)
 }
