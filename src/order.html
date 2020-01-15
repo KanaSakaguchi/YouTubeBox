@@ -38,8 +38,9 @@
               </el-form-item>
             </el-form>
             <div v-loading="isSearchLoading">
+              <div>{{(searchResult.total || 0).toLocaleString()}} item(s) hit</div>
               <el-table
-                  :data="searchResult"
+                  :data="searchResult.list"
                   style="width: 100%"
                   empty-text="No result."
                   :show-header="false"
@@ -80,7 +81,7 @@
               keyword: ''
             },
             isSearchLoading: false,
-            searchResult: []
+            searchResult: {}
           }
         },
         methods: {
@@ -93,17 +94,17 @@
           setSearchResult(searchResult) {
             this.searchResult = searchResult
             this.isSearchLoading = false
-            this.searchResult.forEach(function (video, index) {
+            this.searchResult.list.forEach(function (video, index) {
               if (video.type === 'video') {
                 google.script.run
                   .withSuccessHandler(function (videoResource) {
-                    Vue.set(this.searchResult, index, videoResource)
+                    Vue.set(this.searchResult.list, index, videoResource)
                   }.bind(this))
                   .getVideoResource(video.id)
               } else {
                 google.script.run
                   .withSuccessHandler(function (videoResource) {
-                    Vue.set(this.searchResult, index, videoResource)
+                    Vue.set(this.searchResult.list, index, videoResource)
                   }.bind(this))
                   .getPlaylistResource(video.id)
               }

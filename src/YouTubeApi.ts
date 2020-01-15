@@ -7,14 +7,22 @@ import {
   ItemResource
 } from './extractItemResource'
 
-function search(keyword: string): ItemResource[] {
+interface SearchResult2 {
+  list: ItemResource[],
+  total: number
+}
+
+function search(keyword: string): SearchResult2 {
   const result: SearchListResponse = YouTube.Search.list('id,snippet',
     {
       q: keyword,
       type: 'video,playlist'
     })
 
-  return result.items.map((video: SearchResult): ItemResource => extractItemResource_(video))
+  return {
+    list: result.items.map((video: SearchResult): ItemResource => extractItemResource_(video)),
+    total: result.pageInfo.totalResults
+  }
 }
 
 function getVideoResource(videoId: string): ItemResource {
