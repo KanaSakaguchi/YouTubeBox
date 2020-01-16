@@ -9,19 +9,24 @@ import {
 
 interface SearchResult2 {
   list: ItemResource[],
-  total: number
+  total: number,
+  prevPageToken: string,
+  nextPageToken: string
 }
 
-function search(keyword: string): SearchResult2 {
+function search(keyword: string, pageToken: string): SearchResult2 {
   const result: SearchListResponse = YouTube.Search.list('id,snippet',
     {
       q: keyword,
-      type: 'video,playlist'
+      type: 'video,playlist',
+      pageToken: pageToken
     })
 
   return {
     list: result.items.map((video: SearchResult): ItemResource => extractItemResource_(video)),
-    total: result.pageInfo.totalResults
+    total: result.pageInfo.totalResults,
+    prevPageToken: result.prevPageToken,
+    nextPageToken: result.nextPageToken
   }
 }
 

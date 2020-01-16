@@ -32,13 +32,39 @@
                       slot="append"
                       native-type="submit"
                       icon="el-icon-search"
-                      @click="search">
+                      @click="search()">
                   </el-button>
                 </el-input>
               </el-form-item>
             </el-form>
             <div v-loading="isSearchLoading">
-              <div v-show="searchResult.list">{{(searchResult.total || 0).toLocaleString()}} item(s) hit</div>
+              <el-row
+                  v-show="searchResult.list"
+                  type="flex"
+                  justify="space-between"
+                  style="margin-top:15px">
+                <el-col :span="1">
+                  <el-button
+                      plain
+                      size="small"
+                      icon="el-icon-arrow-left"
+                      :disabled="!searchResult.prevPageToken"
+                      @click="search(searchResult.prevPageToken)">
+                  </el-button>
+                </el-col>
+                <el-col :span="5">
+                  {{(searchResult.total || 0).toLocaleString()}} item(s) hit
+                </el-col>
+                <el-col :span="1">
+                  <el-button
+                      plain
+                      size="small"
+                      icon="el-icon-arrow-right"
+                      :disabled="!searchResult.nextPageToken"
+                      @click="search(searchResult.nextPageToken)">
+                  </el-button>
+                </el-col>
+              </el-row>
               <el-table
                   :data="searchResult.list"
                   style="width: 100%"
@@ -64,6 +90,30 @@
                   </template>
                 </el-table-column>
               </el-table>
+              <el-row
+                  v-show="searchResult.list"
+                  type="flex"
+                  justify="space-between"
+                  style="margin-top:15px">
+                <el-col :span="1">
+                  <el-button
+                      plain
+                      size="small"
+                      icon="el-icon-arrow-left"
+                      :disabled="!searchResult.prevPageToken"
+                      @click="search(searchResult.prevPageToken)">
+                  </el-button>
+                </el-col>
+                <el-col :span="1">
+                  <el-button
+                      plain
+                      size="small"
+                      icon="el-icon-arrow-right"
+                      :disabled="!searchResult.nextPageToken"
+                      @click="search(searchResult.nextPageToken)">
+                  </el-button>
+                </el-col>
+              </el-row>
             </div>
           </section>
         </el-main>
@@ -85,11 +135,11 @@
           }
         },
         methods: {
-          search() {
+          search(pageToken) {
             this.isSearchLoading = true
             google.script.run
               .withSuccessHandler(this.setSearchResult)
-              .search(this.searchForm.keyword)
+              .search(this.searchForm.keyword, pageToken)
           },
           setSearchResult(searchResult) {
             this.searchResult = searchResult
