@@ -64,6 +64,17 @@
                       </el-form-item>
                     </el-col>
                     <el-col :span="6">
+                      Published day
+                      <el-form-item>
+                        <el-select v-model="searchForm.publishPeriod" placeholder="Not specified" clearable>
+                          <el-option
+                              v-for="option in searchForm.periodOptions"
+                              :value="option">
+                          </el-option>
+                        </el-select>
+                      </el-form-item>
+                    </el-col>
+                    <el-col :span="6">
                       MaxResults
                       <el-form-item>
                         <el-select v-model="searchForm.maxResults">
@@ -179,6 +190,14 @@
                 'title',
                 'viewCount'
               ],
+              publishedPeriod: null,
+              periodOptions: [
+                'Within an hour',
+                'Today',
+                'This week',
+                'This month',
+                'This year'
+              ],
               maxResultsOptions: [
                 5,
                 10,
@@ -200,6 +219,7 @@
               .search(
                 this.searchForm.keyword,
                 this.searchForm.order,
+                this.searchForm.publishedPeriod,
                 this.searchForm.maxResults,
                 pageToken
               )

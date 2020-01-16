@@ -14,6 +14,13 @@ enum OrderType {
   TITLE = 'title',
   VIEW_COUNT = 'viewCount'
 }
+enum PublishedPeriod {
+  WITHIN_AN_HOUR = 'Within an hour',
+  TODAY = 'Today',
+  THIS_WEEK = 'This week',
+  THIS_MONTH = 'This month',
+  THIS_YEAR = 'This year'
+}
 
 interface SearchResult2 {
   list: ItemResource[],
@@ -22,12 +29,13 @@ interface SearchResult2 {
   nextPageToken: string
 }
 
-function search(keyword: string, order: OrderType, maxResults: number, pageToken: string): SearchResult2 {
+function search(keyword: string, order: OrderType, publishedPeriod: PublishedPeriod | null, maxResults: number, pageToken: string): SearchResult2 {
   const result: SearchListResponse = YouTube.Search.list('id,snippet',
     {
       q: keyword,
       type: 'video,playlist',
       order: order,
+      publishedAfter: exchangePublishedPeriod_(publishedPeriod),
       maxResults: maxResults,
       pageToken: pageToken
     })
@@ -60,4 +68,51 @@ function getPlaylistResource(playlistId: string): ItemResource {
   }
 
   return extractPlaylistResource_(playlist)
+}
+
+function exchangePublishedPeriod_(publishedPeriod: PublishedPeriod): string | null {
+
+  let publishedAfter = new Date()
+  switch (publishedPeriod) {
+    case PublishedPeriod.WITHIN_AN_HOUR:
+      publishedAfter.setHours(publishedAfter.getHours() - 1)
+      break
+    case PublishedPeriod.TODAY:
+      publishedAfter.setHours(0)
+      publishedAfter.setMinutes(0)
+      publishedAfter.setSeconds(0)
+      publishedAfter.setMilliseconds(0)
+      break
+    case PublishedPeriod.THIS_WEEK:
+      while (publishedAfter.getDay() > 0) {
+        publishedAfter.setDate(publishedAfter.getDate())
+      }
+      publishedAfter.setHours(0)
+      publishedAfter.setMinutes(0)
+      publishedAfter.setSeconds(0)
+      publishedAfter.setMilliseconds(0)
+      break
+    case PublishedPeriod.THIS_MONTH:
+      publishedAfter.setDate(1)
+      publishedAfter.setHours(0)
+      publishedAfter.setMinutes(0)
+      publishedAfter.setSeconds(0)
+      publishedAfter.setMilliseconds(0)
+      break
+    case PublishedPeriod.THIS_YEAR:
+      publishedAfter.setMonth(1)
+      publishedAfter.setDate(1)
+      publishedAfter.setHours(0)
+      publishedAfter.setMinutes(0)
+      publishedAfter.setSeconds(0)
+      publishedAfter.setMilliseconds(0)
+      break
+    default:
+      publishedAfter = null
+  }
+
+  if (publishedAfter) {
+    return Utilities.formatDate(publishedAfter, 'GMT', "yyyy-MM-dd'T'HH:mm:ss'Z'")
+  }
+  return null
 }
