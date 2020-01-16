@@ -7,6 +7,14 @@ import {
   ItemResource
 } from './extractItemResource'
 
+enum OrderType {
+  DATE = 'date',
+  RATING = 'rating',
+  RELEVANCE = 'relevance',
+  TITLE = 'title',
+  VIEW_COUNT = 'viewCount'
+}
+
 interface SearchResult2 {
   list: ItemResource[],
   total: number,
@@ -14,11 +22,12 @@ interface SearchResult2 {
   nextPageToken: string
 }
 
-function search(keyword: string, maxResults: number, pageToken: string): SearchResult2 {
+function search(keyword: string, order: OrderType, maxResults: number, pageToken: string): SearchResult2 {
   const result: SearchListResponse = YouTube.Search.list('id,snippet',
     {
       q: keyword,
       type: 'video,playlist',
+      order: order,
       maxResults: maxResults,
       pageToken: pageToken
     })

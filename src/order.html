@@ -51,15 +51,30 @@
                   <template slot="title">
                     <i class="el-icon-s-operation"></i> Option
                   </template>
-                  MaxResults
-                  <el-form-item>
-                    <el-select v-model="searchForm.maxResults">
-                      <el-option
-                          v-for="option in searchForm.maxResultsOptions"
-                          :value="option">
-                      </el-option>
-                    </el-select>
-                  </el-form-item>
+                  <el-row>
+                    <el-col :span="6">
+                      Order
+                      <el-form-item>
+                        <el-select v-model="searchForm.order">
+                          <el-option
+                              v-for="option in searchForm.orderOptions"
+                              :value="option">
+                          </el-option>
+                        </el-select>
+                      </el-form-item>
+                    </el-col>
+                    <el-col :span="6">
+                      MaxResults
+                      <el-form-item>
+                        <el-select v-model="searchForm.maxResults">
+                          <el-option
+                              v-for="option in searchForm.maxResultsOptions"
+                              :value="option">
+                          </el-option>
+                        </el-select>
+                      </el-form-item>
+                    </el-col>
+                  </el-row>
                 </el-collapse-item>
               </el-collapse>
             </el-form>
@@ -156,6 +171,14 @@
             searchForm: {
               keyword: '',
               maxResults: 5,
+              order: 'relevance',
+              orderOptions: [
+                'date',
+                'rating',
+                'relevance',
+                'title',
+                'viewCount'
+              ],
               maxResultsOptions: [
                 5,
                 10,
@@ -174,7 +197,12 @@
             this.isSearchLoading = true
             google.script.run
               .withSuccessHandler(this.setSearchResult)
-              .search(this.searchForm.keyword, this.searchForm.maxResults, pageToken)
+              .search(
+                this.searchForm.keyword,
+                this.searchForm.order,
+                this.searchForm.maxResults,
+                pageToken
+              )
           },
           setSearchResult(searchResult) {
             this.searchResult = searchResult
