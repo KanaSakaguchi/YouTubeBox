@@ -14,6 +14,16 @@
       .el-link.is-underline:hover:after {
         bottom: 5px;
       }
+      .el-collapse-item.option > div > .el-collapse-item__header {
+        height: 20px;
+        line-height: 20px;
+      }
+      .el-collapse-item.option > div > div > i.el-collapse-item__arrow.el-icon-arrow-right {
+        line-height: 20px;
+      }
+      .el-collapse-item.option > div > .el-collapse-item__content {
+        padding-bottom: 0;
+      }
     </style>
   </head>
   <body>
@@ -36,6 +46,22 @@
                   </el-button>
                 </el-input>
               </el-form-item>
+              <el-collapse>
+                <el-collapse-item class="option" name="option">
+                  <template slot="title">
+                    <i class="el-icon-s-operation"></i> Option
+                  </template>
+                  MaxResults
+                  <el-form-item>
+                    <el-select v-model="searchForm.maxResults">
+                      <el-option
+                          v-for="option in searchForm.maxResultsOptions"
+                          :value="option">
+                      </el-option>
+                    </el-select>
+                  </el-form-item>
+                </el-collapse-item>
+              </el-collapse>
             </el-form>
             <div v-loading="isSearchLoading">
               <el-row
@@ -128,7 +154,16 @@
         data() {
           return {
             searchForm: {
-              keyword: ''
+              keyword: '',
+              maxResults: 5,
+              maxResultsOptions: [
+                5,
+                10,
+                20,
+                30,
+                40,
+                50
+              ]
             },
             isSearchLoading: false,
             searchResult: {}
@@ -139,7 +174,7 @@
             this.isSearchLoading = true
             google.script.run
               .withSuccessHandler(this.setSearchResult)
-              .search(this.searchForm.keyword, pageToken)
+              .search(this.searchForm.keyword, this.searchForm.maxResults, pageToken)
           },
           setSearchResult(searchResult) {
             this.searchResult = searchResult

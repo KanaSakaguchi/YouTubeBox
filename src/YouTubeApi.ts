@@ -14,11 +14,12 @@ interface SearchResult2 {
   nextPageToken: string
 }
 
-function search(keyword: string, pageToken: string): SearchResult2 {
+function search(keyword: string, maxResults: number, pageToken: string): SearchResult2 {
   const result: SearchListResponse = YouTube.Search.list('id,snippet',
     {
       q: keyword,
       type: 'video,playlist',
+      maxResults: maxResults,
       pageToken: pageToken
     })
 
