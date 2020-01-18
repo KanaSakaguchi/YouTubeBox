@@ -144,7 +144,8 @@
                         type="primary"
                         native-type="submit"
                         size="small"
-                        icon="el-icon-edit-outline">
+                        icon="el-icon-edit-outline"
+                        @click="order(list.row)">
                       Order
                     </el-button>
                   </template>
@@ -250,6 +251,13 @@
                   .getPlaylistResource(video.id)
               }
             }.bind(this))
+          },
+          order(itemResource) {
+            google.script.run
+              .withSuccessHandler(function () {
+                console.log('ordered', itemResource)
+              }.bind(this))
+              .orderItem(itemResource)
           }
         }
       })

@@ -2,7 +2,7 @@ import SearchResult = GoogleAppsScript.YouTube.Schema.SearchResult
 import Video = GoogleAppsScript.YouTube.Schema.Video
 import Playlist = GoogleAppsScript.YouTube.Schema.Playlist
 
-enum ItemType {
+export enum ItemType {
   VIDEO = 'video',
   PLAYLIST = 'playlist'
 }
