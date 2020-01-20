@@ -145,7 +145,8 @@
                         native-type="submit"
                         size="small"
                         icon="el-icon-edit-outline"
-                        @click="order(list.row)">
+                        :loading="list.row.isOrdering"
+                        @click="order(list.row, list.$index)">
                       Order
                     </el-button>
                   </template>
@@ -300,14 +301,18 @@
               }.bind(this))
               .getOrders()
           },
-          order(itemResource) {
+          order(itemResource, index) {
+            itemResource.isOrdering = true
+            Vue.set(this.searchResult.list, index, itemResource)
             google.script.run
               .withSuccessHandler(function () {
-                this.onOrderSuccess(itemResource)
+                this.onOrderSuccess(itemResource, index)
               }.bind(this))
               .orderItem(itemResource)
           },
-          onOrderSuccess(itemResource) {
+          onOrderSuccess(itemResource, index) {
+            itemResource.isOrdering = false
+            Vue.set(this.searchResult.list, index, itemResource)
             this.getOrders()
           }
         }

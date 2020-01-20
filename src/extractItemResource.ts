@@ -16,6 +16,7 @@ export interface ItemResource {
   videoLength: string,
   channelName: string,
   channelUrl: string,
+  isOrdering?: boolean,
   orderUser?: string
 }
 
