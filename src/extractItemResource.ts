@@ -17,6 +17,7 @@ export interface ItemResource {
   channelName: string,
   channelUrl: string,
   isOrdering?: boolean,
+  isOrdered? :boolean,
   orderUser?: string
 }
 

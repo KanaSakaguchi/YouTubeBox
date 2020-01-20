@@ -141,6 +141,16 @@
                     </cite>
                     <br>
                     <el-button
+                        v-if="list.row.isOrdered"
+                        type="primary"
+                        plain
+                        disabled
+                        size="small"
+                        icon="el-icon-check">
+                      Ordered!
+                    </el-button>
+                    <el-button
+                        v-else
                         type="primary"
                         native-type="submit"
                         size="small"
@@ -311,7 +321,13 @@
               .orderItem(itemResource)
           },
           onOrderSuccess(itemResource, index) {
+            this.$notify({
+              title: 'Order Success!',
+              message: itemResource.title,
+              type: 'success'
+            })
             itemResource.isOrdering = false
+            itemResource.isOrdered = true
             Vue.set(this.searchResult.list, index, itemResource)
             this.getOrders()
           }
