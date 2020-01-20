@@ -23,3 +23,9 @@ function orderVideo_(video: ItemResource) {
 function orderPlaylist_(playlist: ItemResource) {
   //TODO プレイリストを注文できるようにする
 }
+
+function getOrders(): ItemResource[] {
+  const sheet: Sheet = getSheet_()
+  return sheet.getSheetValues(2,  1,  sheet.getLastRow() - 1, 1)
+    .map((order: Array<string>): ItemResource => JSON.parse(order[0]))
+}
