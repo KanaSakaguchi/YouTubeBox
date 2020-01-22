@@ -15,7 +15,8 @@ export interface ItemResource {
   thumbnailUrl: string,
   videoLength: string,
   channelName: string,
-  channelUrl: string
+  channelUrl: string,
+  orderUser?: string
 }
 
 export function extractItemResource_(video: SearchResult): ItemResource {
