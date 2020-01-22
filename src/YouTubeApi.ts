@@ -70,6 +70,30 @@ function getPlaylistResource(playlistId: string): ItemResource {
   return extractPlaylistResource_(playlist)
 }
 
+export function getPlaylistVideos_(playlistId: string, pageToken?: string): ItemResource[] {
+  const playlistItems = YouTube.PlaylistItems.list("id,snippet,contentDetails,status", {
+    playlistId,
+    maxResults: 50, // PlaylistItemsは上限が50になっている
+    pageToken
+  })
+
+  const videos = playlistItems.items.map(playlistItem => {
+    try {
+      return getVideoResource(playlistItem.contentDetails.videoId)
+    } catch (error) {
+      return null
+    }
+  }).filter(video =>  video)
+
+  if (!videos) {
+    return videos
+  } else if (playlistItems.nextPageToken) {
+    return videos.concat(getPlaylistVideos_(playlistId, playlistItems.nextPageToken))
+  } else {
+    return videos
+  }
+}
+
 function exchangePublishedPeriod_(publishedPeriod: PublishedPeriod): string | null {
 
   let publishedAfter = new Date()

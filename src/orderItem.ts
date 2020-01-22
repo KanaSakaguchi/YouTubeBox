@@ -1,6 +1,7 @@
 import Sheet = GoogleAppsScript.Spreadsheet.Sheet;
 import Spreadsheet = GoogleAppsScript.Spreadsheet.Spreadsheet;
 import { ItemResource, ItemType } from "./extractItemResource";
+import { getPlaylistVideos_ } from "./YouTubeApi";
 
 function getSheet_(): Sheet {
   const ss: Spreadsheet = SpreadsheetApp.openByUrl(PropertiesService.getScriptProperties().getProperty('sheet'))
@@ -22,7 +23,9 @@ function orderVideo_(video: ItemResource) {
 }
 
 function orderPlaylist_(playlist: ItemResource) {
-  //TODO プレイリストを注文できるようにする
+  getPlaylistVideos_(playlist.id).forEach(video => {
+    orderVideo_(video)
+  })
 }
 
 function getOrders(): ItemResource[] {
