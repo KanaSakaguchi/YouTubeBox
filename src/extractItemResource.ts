@@ -79,6 +79,9 @@ function canOrderVideo_(video: Video): boolean {
   if (video.contentDetails.duration === 'PT0S') {
     return false
   }
+  if (!video.status.embeddable) {
+    return false
+  }
   return true
 }
 
