@@ -72,6 +72,10 @@ export function extractPlaylistResource_(playlist: Playlist): ItemResource {
 }
 
 function exchangeTime_(duration: string): string {
+  if (duration === 'PT0S') {
+    return 'live'
+  }
+
   let time: RegExpMatchArray
 
   time = duration.match(/PT(\d+)H(\d+)M(\d+)S/)
