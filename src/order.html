@@ -141,7 +141,16 @@
                     </cite>
                     <br>
                     <el-button
-                        v-if="list.row.isOrdered"
+                        v-if="!list.row.canOrder"
+                        type="info"
+                        plain
+                        disabled
+                        size="small"
+                        icon="el-icon-close">
+                      Can't order
+                    </el-button>
+                    <el-button
+                        v-else-if="list.row.isOrdered"
                         type="primary"
                         plain
                         disabled

@@ -16,6 +16,7 @@ export interface ItemResource {
   videoLength: string,
   channelName: string,
   channelUrl: string,
+  canOrder: boolean,
   isOrdering?: boolean,
   isOrdered? :boolean,
   orderUser?: string
@@ -30,7 +31,8 @@ export function extractItemResource_(video: SearchResult): ItemResource {
     thumbnailUrl: video.snippet.thumbnails.default.url,
     videoLength: '読み込み中',
     channelName: video.snippet.channelTitle,
-    channelUrl: `https://www.youtube.com/channel/${video.snippet.channelId}`
+    channelUrl: `https://www.youtube.com/channel/${video.snippet.channelId}`,
+    canOrder: false
   }
 
   if (video.id.videoId) {
@@ -54,7 +56,8 @@ export function extractVideoResource_(video: Video): ItemResource {
     thumbnailUrl: video.snippet.thumbnails.default.url,
     videoLength: exchangeTime_(video.contentDetails.duration),
     channelName: video.snippet.channelTitle,
-    channelUrl: `https://www.youtube.com/channel/${video.snippet.channelId}`
+    channelUrl: `https://www.youtube.com/channel/${video.snippet.channelId}`,
+    canOrder: canOrderVideo_(video)
   }
 }
 
@@ -67,8 +70,16 @@ export function extractPlaylistResource_(playlist: Playlist): ItemResource {
     thumbnailUrl: playlist.snippet.thumbnails.default.url,
     videoLength: `${playlist.contentDetails.itemCount} videos`,
     channelName: playlist.snippet.channelTitle,
-    channelUrl: `https://www.youtube.com/channel/${playlist.snippet.channelId}`
+    channelUrl: `https://www.youtube.com/channel/${playlist.snippet.channelId}`,
+    canOrder: true
   }
+}
+
+function canOrderVideo_(video: Video): boolean {
+  if (video.contentDetails.duration === 'PT0S') {
+    return false
+  }
+  return true
 }
 
 function exchangeTime_(duration: string): string {
