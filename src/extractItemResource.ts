@@ -82,6 +82,9 @@ function canOrderVideo_(video: Video): boolean {
   if (!video.status.embeddable) {
     return false
   }
+  if (video.contentDetails.regionRestriction.blocked.indexOf('JP') !== -1) {
+    return false
+  }
   return true
 }
 
