@@ -225,7 +225,12 @@
                       <el-link :href="list.row.channelUrl" type="info" target="_blank">{{list.row.channelName}}</el-link>
                     </cite>
                     <br>
-                    Order by {{list.row.orderUser}}
+                    Order by {{list.row.orderUser}}<br>
+                    <el-button
+                        icon="el-icon-delete"
+                        size="small"
+                        plain
+                        @click="deleteOrder(list.row)"></el-button>
                   </template>
                 </el-table-column>
               </el-table>
@@ -360,6 +365,16 @@
             itemResource.isOrdering = false
             itemResource.isOrdered = false
             Vue.set(this.searchResult.list, index, itemResource)
+            this.getOrders()
+          },
+          deleteOrder(videoResource) {
+            google.script.run
+              .withSuccessHandler(function () {
+                this.onDeleteSuccess()
+              }.bind(this))
+              .deleteOrder(videoResource)
+          },
+          onDeleteSuccess() {
             this.getOrders()
           }
         }

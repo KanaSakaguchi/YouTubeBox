@@ -19,6 +19,7 @@ export interface ItemResource {
   canOrder: boolean,
   isOrdering?: boolean,
   isOrdered? :boolean,
+  isDeleting? :boolean,
   orderUser?: string
 }
 
