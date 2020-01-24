@@ -17,6 +17,9 @@ function orderItem(item: ItemResource) {
 }
 
 function orderVideo_(video: ItemResource) {
+  if (!video.canOrder) {
+    return
+  }
   video.orderUser = Session.getActiveUser().getEmail()
   const sheet: Sheet = getSheet_()
   sheet.getRange(sheet.getLastRow() + 1, 1).setValue(JSON.stringify(video))
