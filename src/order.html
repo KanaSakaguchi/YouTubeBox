@@ -35,20 +35,22 @@
         <el-main>
           <section>
             <h2>Now Playing</h2>
-            <el-row v-if="nowPlaying" :gutter="0" justify="start">
-              <el-col :span="4">
-                <img :src="nowPlaying.thumbnailUrl" alt="Thumbnail">
-              </el-col>
-              <el-col :span="20">
-                <el-link :href="nowPlaying.url" type="primary" target="_blank">{{nowPlaying.title}}</el-link><br>
-                {{nowPlaying.videoLength}}<br>
-                <cite class="channelName">
-                  <el-link :href="nowPlaying.channelUrl" type="info" target="_blank">{{nowPlaying.channelName}}</el-link>
-                </cite>
-                <br>
-                Order by {{nowPlaying.orderUser}}
-              </el-col>
-            </el-row>
+            <div v-loading="isListLoading">
+              <el-row v-if="nowPlaying" :gutter="0" justify="start">
+                <el-col :span="4">
+                  <img :src="nowPlaying.thumbnailUrl" alt="Thumbnail">
+                </el-col>
+                <el-col :span="20">
+                  <el-link :href="nowPlaying.url" type="primary" target="_blank">{{nowPlaying.title}}</el-link><br>
+                  {{nowPlaying.videoLength}}<br>
+                  <cite class="channelName">
+                    <el-link :href="nowPlaying.channelUrl" type="info" target="_blank">{{nowPlaying.channelName}}</el-link>
+                  </cite>
+                  <br>
+                  Order by {{nowPlaying.orderUser}}
+                </el-col>
+              </el-row>
+            </div>
           </section>
 
           <section>
