@@ -180,32 +180,34 @@
 
           <section>
             <h2>Play List</h2>
-            <el-table
-                :data="playList"
-                style="width: 100%"
-                :show-header="false"
-                stripe>
-              <el-table-column
-                  type="index"
-                  label=" "
-                  width="50">
-              </el-table-column>
-              <el-table-column
-                  width="160">
-                <template slot-scope="list">
-                  <img :src="list.row.thumbnailUrl" alt="Thumbnail">
-                </template>
-              </el-table-column>
-              <el-table-column>
-                <template slot-scope="list">
-                  <el-link :href="list.row.url" type="primary" target="_blank">{{list.row.title}}</el-link><br>
-                  {{list.row.videoLength}}<br>
-                  <cite class="channelName">
-                    <el-link :href="list.row.channelUrl" type="info" target="_blank">{{list.row.channelName}}</el-link>
-                  </cite>
-                </template>
-              </el-table-column>
-            </el-table>
+            <div v-loading="isListLoading">
+              <el-table
+                  :data="playList"
+                  style="width: 100%"
+                  :show-header="false"
+                  stripe>
+                <el-table-column
+                    type="index"
+                    label=" "
+                    width="50">
+                </el-table-column>
+                <el-table-column
+                    width="160">
+                  <template slot-scope="list">
+                    <img :src="list.row.thumbnailUrl" alt="Thumbnail">
+                  </template>
+                </el-table-column>
+                <el-table-column>
+                  <template slot-scope="list">
+                    <el-link :href="list.row.url" type="primary" target="_blank">{{list.row.title}}</el-link><br>
+                    {{list.row.videoLength}}<br>
+                    <cite class="channelName">
+                      <el-link :href="list.row.channelUrl" type="info" target="_blank">{{list.row.channelName}}</el-link>
+                    </cite>
+                  </template>
+                </el-table-column>
+              </el-table>
+            </div>
           </section>
         </el-main>
       </el-container>
@@ -248,6 +250,7 @@
             },
             isSearchLoading: false,
             searchResult: {},
+            isListLoading: false,
             playList: []
           }
         },
@@ -287,9 +290,11 @@
             }.bind(this))
           },
           getOrders() {
+            this.isListLoading = true
             google.script.run
               .withSuccessHandler(function (orders) {
                 this.playList = orders
+                this.isListLoading = false
               }.bind(this))
               .getOrders()
           },
