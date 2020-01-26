@@ -38,7 +38,7 @@
               </el-form-item>
             </el-form>
             <div v-loading="isSearchLoading">
-              <div>{{(searchResult.total || 0).toLocaleString()}} item(s) hit</div>
+              <div v-show="searchResult.list">{{(searchResult.total || 0).toLocaleString()}} item(s) hit</div>
               <el-table
                   :data="searchResult.list"
                   style="width: 100%"
