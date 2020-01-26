@@ -373,11 +373,16 @@
             Vue.set(this.playList, index, videoResource)
             google.script.run
               .withSuccessHandler(function () {
-                this.onDeleteSuccess()
+                this.onDeleteSuccess(videoResource)
               }.bind(this))
               .deleteOrder(videoResource)
           },
-          onDeleteSuccess() {
+          onDeleteSuccess(videoResource) {
+            this.$notify({
+              title: 'Delete Success!',
+              message: videoResource.title,
+              type: 'success'
+            })
             this.getOrders()
           }
         }
