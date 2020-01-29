@@ -55,167 +55,172 @@
 
           <section>
             <h2>Order</h2>
-            <el-form label-width="0" ref="searchForm" :model="searchForm">
-              <el-form-item class="inputKeyword" label="" prop="keyword">
-                <el-input v-model="searchForm.keyword">
-                  <el-button
-                      slot="append"
-                      native-type="submit"
-                      icon="el-icon-search"
-                      @click="search()">
-                  </el-button>
-                </el-input>
-              </el-form-item>
-              <el-collapse>
-                <el-collapse-item class="option" name="option">
-                  <template slot="title">
-                    <i class="el-icon-s-operation"></i> Option
-                  </template>
-                  <el-row>
-                    <el-col :span="6">
-                      Order
-                      <el-form-item>
-                        <el-select v-model="searchForm.order">
-                          <el-option
-                              v-for="option in searchForm.orderOptions"
-                              :value="option">
-                          </el-option>
-                        </el-select>
-                      </el-form-item>
+            <el-tabs type="border-card">
+              <el-tab-pane>
+                <span slot="label"><i class="el-icon-search"></i> Search YouTube</span>
+                <el-form label-width="0" ref="searchForm" :model="searchForm">
+                  <el-form-item class="inputKeyword" label="" prop="keyword">
+                    <el-input v-model="searchForm.keyword">
+                      <el-button
+                          slot="append"
+                          native-type="submit"
+                          icon="el-icon-search"
+                          @click="search()">
+                      </el-button>
+                    </el-input>
+                  </el-form-item>
+                  <el-collapse>
+                    <el-collapse-item class="option" name="option">
+                      <template slot="title">
+                        <i class="el-icon-s-operation"></i> Option
+                      </template>
+                      <el-row>
+                        <el-col :span="6">
+                          Order
+                          <el-form-item>
+                            <el-select v-model="searchForm.order">
+                              <el-option
+                                  v-for="option in searchForm.orderOptions"
+                                  :value="option">
+                              </el-option>
+                            </el-select>
+                          </el-form-item>
+                        </el-col>
+                        <el-col :span="6">
+                          Published day
+                          <el-form-item>
+                            <el-select v-model="searchForm.publishPeriod" placeholder="Not specified" clearable>
+                              <el-option
+                                  v-for="option in searchForm.periodOptions"
+                                  :value="option">
+                              </el-option>
+                            </el-select>
+                          </el-form-item>
+                        </el-col>
+                        <el-col :span="6">
+                          MaxResults
+                          <el-form-item>
+                            <el-select v-model="searchForm.maxResults">
+                              <el-option
+                                  v-for="option in searchForm.maxResultsOptions"
+                                  :value="option">
+                              </el-option>
+                            </el-select>
+                          </el-form-item>
+                        </el-col>
+                      </el-row>
+                    </el-collapse-item>
+                  </el-collapse>
+                </el-form>
+                <div v-loading="isSearchLoading">
+                  <el-row
+                      v-show="searchResult.list"
+                      type="flex"
+                      justify="space-between"
+                      style="margin-top:15px">
+                    <el-col :span="1">
+                      <el-button
+                          plain
+                          size="small"
+                          icon="el-icon-arrow-left"
+                          :disabled="!searchResult.prevPageToken"
+                          @click="search(searchResult.prevPageToken)">
+                      </el-button>
                     </el-col>
-                    <el-col :span="6">
-                      Published day
-                      <el-form-item>
-                        <el-select v-model="searchForm.publishPeriod" placeholder="Not specified" clearable>
-                          <el-option
-                              v-for="option in searchForm.periodOptions"
-                              :value="option">
-                          </el-option>
-                        </el-select>
-                      </el-form-item>
+                    <el-col :span="5">
+                      {{(searchResult.total || 0).toLocaleString()}} item(s) hit
                     </el-col>
-                    <el-col :span="6">
-                      MaxResults
-                      <el-form-item>
-                        <el-select v-model="searchForm.maxResults">
-                          <el-option
-                              v-for="option in searchForm.maxResultsOptions"
-                              :value="option">
-                          </el-option>
-                        </el-select>
-                      </el-form-item>
+                    <el-col :span="1">
+                      <el-button
+                          plain
+                          size="small"
+                          icon="el-icon-arrow-right"
+                          :disabled="!searchResult.nextPageToken"
+                          @click="search(searchResult.nextPageToken)">
+                      </el-button>
                     </el-col>
                   </el-row>
-                </el-collapse-item>
-              </el-collapse>
-            </el-form>
-            <div v-loading="isSearchLoading">
-              <el-row
-                  v-show="searchResult.list"
-                  type="flex"
-                  justify="space-between"
-                  style="margin-top:15px">
-                <el-col :span="1">
-                  <el-button
-                      plain
-                      size="small"
-                      icon="el-icon-arrow-left"
-                      :disabled="!searchResult.prevPageToken"
-                      @click="search(searchResult.prevPageToken)">
-                  </el-button>
-                </el-col>
-                <el-col :span="5">
-                  {{(searchResult.total || 0).toLocaleString()}} item(s) hit
-                </el-col>
-                <el-col :span="1">
-                  <el-button
-                      plain
-                      size="small"
-                      icon="el-icon-arrow-right"
-                      :disabled="!searchResult.nextPageToken"
-                      @click="search(searchResult.nextPageToken)">
-                  </el-button>
-                </el-col>
-              </el-row>
-              <el-table
-                  :data="searchResult.list"
-                  style="width: 100%"
-                  empty-text="No result."
-                  :show-header="false"
-                  stripe>
-                <el-table-column
-                    width="160">
-                  <template slot-scope="list">
-                    <el-image
-                        :src="list.row.thumbnailUrl"
-                        fit="contain">
-                    </el-image>
-                  </template>
-                </el-table-column>
-                <el-table-column>
-                  <template slot-scope="list">
-                    <el-link :href="list.row.url" type="primary" target="_blank">{{list.row.title}}</el-link><br>
-                    {{list.row.videoLength}}<br>
-                    <cite class="channelName">
-                      <el-link :href="list.row.channelUrl" type="info" target="_blank">{{list.row.channelName}}</el-link>
-                    </cite>
-                    <br>
-                    <el-button
-                        v-if="!list.row.canOrder"
-                        type="info"
-                        plain
-                        disabled
-                        size="small"
-                        icon="el-icon-close">
-                      Can't order
-                    </el-button>
-                    <el-button
-                        v-else-if="list.row.isOrdered"
-                        type="primary"
-                        plain
-                        disabled
-                        size="small"
-                        icon="el-icon-check">
-                      Ordered!
-                    </el-button>
-                    <el-button
-                        v-else
-                        type="primary"
-                        native-type="submit"
-                        size="small"
-                        icon="el-icon-edit-outline"
-                        :loading="list.row.isOrdering"
-                        @click="order(list.row, list.$index)">
-                      Order
-                    </el-button>
-                  </template>
-                </el-table-column>
-              </el-table>
-              <el-row
-                  v-show="searchResult.list"
-                  type="flex"
-                  justify="space-between"
-                  style="margin-top:15px">
-                <el-col :span="1">
-                  <el-button
-                      plain
-                      size="small"
-                      icon="el-icon-arrow-left"
-                      :disabled="!searchResult.prevPageToken"
-                      @click="search(searchResult.prevPageToken)">
-                  </el-button>
-                </el-col>
-                <el-col :span="1">
-                  <el-button
-                      plain
-                      size="small"
-                      icon="el-icon-arrow-right"
-                      :disabled="!searchResult.nextPageToken"
-                      @click="search(searchResult.nextPageToken)">
-                  </el-button>
-                </el-col>
-              </el-row>
-            </div>
+                  <el-table
+                      :data="searchResult.list"
+                      style="width: 100%"
+                      empty-text="No result."
+                      :show-header="false"
+                      stripe>
+                    <el-table-column
+                        width="160">
+                      <template slot-scope="list">
+                        <el-image
+                            :src="list.row.thumbnailUrl"
+                            fit="contain">
+                        </el-image>
+                      </template>
+                    </el-table-column>
+                    <el-table-column>
+                      <template slot-scope="list">
+                        <el-link :href="list.row.url" type="primary" target="_blank">{{list.row.title}}</el-link><br>
+                        {{list.row.videoLength}}<br>
+                        <cite class="channelName">
+                          <el-link :href="list.row.channelUrl" type="info" target="_blank">{{list.row.channelName}}</el-link>
+                        </cite>
+                        <br>
+                        <el-button
+                            v-if="!list.row.canOrder"
+                            type="info"
+                            plain
+                            disabled
+                            size="small"
+                            icon="el-icon-close">
+                          Can't order
+                        </el-button>
+                        <el-button
+                            v-else-if="list.row.isOrdered"
+                            type="primary"
+                            plain
+                            disabled
+                            size="small"
+                            icon="el-icon-check">
+                          Ordered!
+                        </el-button>
+                        <el-button
+                            v-else
+                            type="primary"
+                            native-type="submit"
+                            size="small"
+                            icon="el-icon-edit-outline"
+                            :loading="list.row.isOrdering"
+                            @click="order(list.row, list.$index)">
+                          Order
+                        </el-button>
+                      </template>
+                    </el-table-column>
+                  </el-table>
+                  <el-row
+                      v-show="searchResult.list"
+                      type="flex"
+                      justify="space-between"
+                      style="margin-top:15px">
+                    <el-col :span="1">
+                      <el-button
+                          plain
+                          size="small"
+                          icon="el-icon-arrow-left"
+                          :disabled="!searchResult.prevPageToken"
+                          @click="search(searchResult.prevPageToken)">
+                      </el-button>
+                    </el-col>
+                    <el-col :span="1">
+                      <el-button
+                          plain
+                          size="small"
+                          icon="el-icon-arrow-right"
+                          :disabled="!searchResult.nextPageToken"
+                          @click="search(searchResult.nextPageToken)">
+                      </el-button>
+                    </el-col>
+                  </el-row>
+                </div>
+              </el-tab-pane>
+            </el-tabs>
           </section>
 
           <section>
