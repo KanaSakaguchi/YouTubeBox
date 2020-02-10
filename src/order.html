@@ -222,7 +222,7 @@
               </el-tab-pane>
               <el-tab-pane>
                 <span slot="label"><i class="el-icon-edit"></i> Input YouTube URL</span>
-                <el-form label-width="0" ref="inputUrlForm" :model="inputUrlForm">
+                <el-form label-width="0" ref="inputUrlForm" :model="inputUrlForm" :rules="urlRules">
                   <el-form-item label="" prop="url">
                     <el-input v-model="inputUrlForm.url" placeholder="Video or Playlist URL"></el-input>
                   </el-form-item>
@@ -325,6 +325,21 @@
             inputUrlForm: {
               url: null
             },
+            urlRules: {
+              url: [
+                {
+                  required: true,
+                  type: 'url',
+                  message: 'Not a Video or Playlist URL.',
+                  trigger: 'blur'
+                },
+                {
+                  pattern: /https:\/\/www\.youtube\.com\/(watch\?v=|playlist\?list=).+/,
+                  message: 'Not a Video or Playlist URL.',
+                  trigger: 'blur'
+                }
+              ]
+            },
             isOrderByUrlLoading: false,
             isListLoading: false,
             nowPlaying: null,
@@ -390,14 +405,19 @@
               .orderItem(itemResource)
           },
           orderByUrl() {
-            this.isOrderByUrlLoading = true
-            var url = this.inputUrlForm.url
-            google.script.run
-              .withSuccessHandler(function (itemResource) {
-                this.isOrderByUrlLoading = false
-                this.onOrderSuccess(itemResource, -1)
-              }.bind(this))
-              .orderByUrl(url)
+            this.$refs['inputUrlForm'].validate((valid) => {
+              if (!valid) {
+                return false
+              }
+              this.isOrderByUrlLoading = true
+              var url = this.inputUrlForm.url
+              google.script.run
+                .withSuccessHandler(function (itemResource) {
+                  this.isOrderByUrlLoading = false
+                  this.onOrderSuccess(itemResource, -1)
+                }.bind(this))
+                .orderByUrl(url)
+            })
           },
           onOrderSuccess(itemResource, index) {
             this.$notify({
