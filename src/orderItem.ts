@@ -1,11 +1,17 @@
 import Sheet = GoogleAppsScript.Spreadsheet.Sheet;
 import Spreadsheet = GoogleAppsScript.Spreadsheet.Spreadsheet;
 import { ItemResource, ItemType } from "./extractItemResource";
-import { getPlaylistVideos_ } from "./YouTubeApi";
+import { getPlaylistVideos_, getVideoResource } from "./YouTubeApi";
 
 function getSheet_(): Sheet {
   const ss: Spreadsheet = SpreadsheetApp.openByUrl(PropertiesService.getScriptProperties().getProperty('sheet'))
   return ss.getSheets()[0]
+}
+
+function orderByUrl(url: string) {
+  const videoId: string = url.match(/https:\/\/www\.youtube\.com\/watch\?v=(.*)/)[1];
+  const videoResource = getVideoResource(videoId)
+  orderVideo_(videoResource)
 }
 
 function orderItem(item: ItemResource) {

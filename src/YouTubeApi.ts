@@ -48,7 +48,7 @@ function search(keyword: string, order: OrderType, publishedPeriod: PublishedPer
   }
 }
 
-function getVideoResource(videoId: string): ItemResource {
+export function getVideoResource(videoId: string): ItemResource {
   const video = YouTube.Videos.list('id,snippet,contentDetails,status', {
     id: videoId
   }).items[0]

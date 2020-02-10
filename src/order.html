@@ -231,7 +231,8 @@
                         type="primary"
                         native-type="submit"
                         size="medium"
-                        icon="el-icon-edit-outline">
+                        icon="el-icon-edit-outline"
+                        @click="orderByUrl">
                       Order
                     </el-button>
                   </el-form-item>
@@ -385,6 +386,10 @@
                 this.onOrderFailed(error, itemResource, index)
               }.bind(this))
               .orderItem(itemResource)
+          },
+          orderByUrl() {
+            var url = this.inputUrlForm.url
+            google.script.run.orderByUrl(url)
           },
           onOrderSuccess(itemResource, index) {
             this.$notify({
