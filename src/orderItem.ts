@@ -8,10 +8,11 @@ function getSheet_(): Sheet {
   return ss.getSheets()[0]
 }
 
-function orderByUrl(url: string) {
+function orderByUrl(url: string): ItemResource {
   const videoId: string = url.match(/https:\/\/www\.youtube\.com\/watch\?v=(.*)/)[1];
   const videoResource = getVideoResource(videoId)
   orderVideo_(videoResource)
+  return videoResource
 }
 
 function orderItem(item: ItemResource) {

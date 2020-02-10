@@ -389,7 +389,11 @@
           },
           orderByUrl() {
             var url = this.inputUrlForm.url
-            google.script.run.orderByUrl(url)
+            google.script.run
+              .withSuccessHandler(function (itemResource) {
+                this.onOrderSuccess(itemResource, -1)
+              }.bind(this))
+              .orderByUrl(url)
           },
           onOrderSuccess(itemResource, index) {
             this.$notify({
@@ -397,9 +401,11 @@
               message: itemResource.title,
               type: 'success'
             })
-            itemResource.isOrdering = false
-            itemResource.isOrdered = true
-            Vue.set(this.searchResult.list, index, itemResource)
+            if (index !== -1) {
+              itemResource.isOrdering = false
+              itemResource.isOrdered = true
+              Vue.set(this.searchResult.list, index, itemResource)
+            }
             this.getOrders()
           },
           onOrderFailed(error, itemResource, index) {
