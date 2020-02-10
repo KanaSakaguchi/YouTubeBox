@@ -37,13 +37,14 @@ function getOrders(): ItemResource[] {
     .map((order: Array<string>): ItemResource => JSON.parse(order[0]))
 }
 
-function deleteOrder(video: ItemResource) {
+function deleteOrder(target: ItemResource): ItemResource {
   const sheet = getSheet_()
   const list = sheet.getSheetValues(2,  1,  sheet.getLastRow() - 1, 1)
   for (let i = 0; i < list.length; i++) {
-    if ((JSON.parse(list[i][0]) as ItemResource).resourceId === video.resourceId) {
+    const video: ItemResource = JSON.parse(list[i][0])
+    if (video.resourceId === target.resourceId) {
       sheet.deleteRow(i + 2)
-      return
+      return video
     }
   }
 }

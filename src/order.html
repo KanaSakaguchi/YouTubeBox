@@ -372,8 +372,8 @@
             videoResource.isDeleting = true
             Vue.set(this.playList, index, videoResource)
             google.script.run
-              .withSuccessHandler(function () {
-                this.onDeleteSuccess(videoResource)
+              .withSuccessHandler(function (deletedVideo) {
+                this.onDeleteSuccess(deletedVideo)
               }.bind(this))
               .withFailureHandler(function (error) {
                 this.onDeleteFailed(error, videoResource)
