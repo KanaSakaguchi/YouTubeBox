@@ -26,7 +26,7 @@ function orderVideo_(video: ItemResource) {
 }
 
 function orderPlaylist_(playlist: ItemResource) {
-  getPlaylistVideos_(playlist.id).forEach(video => {
+  getPlaylistVideos_(playlist.videoId).forEach(video => {
     orderVideo_(video)
   })
 }
@@ -41,7 +41,7 @@ function deleteOrder(video: ItemResource) {
   const sheet = getSheet_()
   const list = sheet.getSheetValues(2,  1,  sheet.getLastRow() - 1, 1)
   for (let i = 0; i < list.length; i++) {
-    if ((JSON.parse(list[i][0]) as ItemResource).id === video.id) {
+    if ((JSON.parse(list[i][0]) as ItemResource).resourceId === video.resourceId) {
       sheet.deleteRow(i + 2)
       return
     }

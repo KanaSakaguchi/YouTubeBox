@@ -307,13 +307,13 @@
                   .withSuccessHandler(function (videoResource) {
                     Vue.set(this.searchResult.list, index, videoResource)
                   }.bind(this))
-                  .getVideoResource(video.id)
+                  .getVideoResource(video.videoId)
               } else {
                 google.script.run
                   .withSuccessHandler(function (videoResource) {
                     Vue.set(this.searchResult.list, index, videoResource)
                   }.bind(this))
-                  .getPlaylistResource(video.id)
+                  .getPlaylistResource(video.videoId)
               }
             }.bind(this))
           },

@@ -8,7 +8,8 @@ export enum ItemType {
 }
 
 export interface ItemResource {
-  id: string,
+  resourceId: string,
+  videoId: string,
   type: ItemType,
   url: string,
   title: string,
@@ -25,7 +26,8 @@ export interface ItemResource {
 
 export function extractItemResource_(video: SearchResult): ItemResource {
   let itemResource: ItemResource = {
-    id: '',
+    resourceId: Utilities.getUuid(),
+    videoId: '',
     type: ItemType.VIDEO,
     url: '',
     title: video.snippet.title,
@@ -37,12 +39,12 @@ export function extractItemResource_(video: SearchResult): ItemResource {
   }
 
   if (video.id.videoId) {
-    itemResource.id = video.id.videoId
-    itemResource.url = `https://www.youtube.com/watch?v=${itemResource.id}`
+    itemResource.videoId = video.id.videoId
+    itemResource.url = `https://www.youtube.com/watch?v=${itemResource.videoId}`
   } else if (video.id.playlistId) {
-    itemResource.id = video.id.playlistId
+    itemResource.videoId = video.id.playlistId
     itemResource.type = ItemType.PLAYLIST
-    itemResource.url = `https://www.youtube.com/playlist?list=${itemResource.id}`
+    itemResource.url = `https://www.youtube.com/playlist?list=${itemResource.videoId}`
   }
 
   return itemResource
@@ -50,7 +52,8 @@ export function extractItemResource_(video: SearchResult): ItemResource {
 
 export function extractVideoResource_(video: Video): ItemResource {
   return {
-    id: video.id,
+    resourceId: Utilities.getUuid(),
+    videoId: video.id,
     type: ItemType.VIDEO,
     url: `https://www.youtube.com/watch?v=${video.id}`,
     title: video.snippet.title,
@@ -64,7 +67,8 @@ export function extractVideoResource_(video: Video): ItemResource {
 
 export function extractPlaylistResource_(playlist: Playlist): ItemResource {
   return {
-    id: playlist.id,
+    resourceId: Utilities.getUuid(),
+    videoId: playlist.id,
     type: ItemType.PLAYLIST,
     url: `https://www.youtube.com/playlist?list=${playlist.id}`,
     title: playlist.snippet.title,
