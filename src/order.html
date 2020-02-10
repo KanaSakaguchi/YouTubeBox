@@ -220,6 +220,23 @@
                   </el-row>
                 </div>
               </el-tab-pane>
+              <el-tab-pane>
+                <span slot="label"><i class="el-icon-edit"></i> Input YouTube URL</span>
+                <el-form label-width="0" ref="inputUrlForm" :model="inputUrlForm">
+                  <el-form-item label="" prop="url">
+                    <el-input v-model="inputUrlForm.url" placeholder="Video or Playlist URL"></el-input>
+                  </el-form-item>
+                  <el-form-item>
+                    <el-button
+                        type="primary"
+                        native-type="submit"
+                        size="medium"
+                        icon="el-icon-edit-outline">
+                      Order
+                    </el-button>
+                  </el-form-item>
+                </el-form>
+              </el-tab-pane>
             </el-tabs>
           </section>
 
@@ -303,6 +320,9 @@
             },
             isSearchLoading: false,
             searchResult: {},
+            inputUrlForm: {
+              url: null
+            },
             isListLoading: false,
             nowPlaying: null,
             playList: []
