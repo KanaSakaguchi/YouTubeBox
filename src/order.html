@@ -405,6 +405,8 @@
               itemResource.isOrdering = false
               itemResource.isOrdered = true
               Vue.set(this.searchResult.list, index, itemResource)
+            } else {
+              this.inputUrlForm.url = null
             }
             this.getOrders()
           },
