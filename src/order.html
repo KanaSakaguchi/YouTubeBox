@@ -232,6 +232,7 @@
                         native-type="submit"
                         size="medium"
                         icon="el-icon-edit-outline"
+                        :loading="isOrderByUrlLoading"
                         @click="orderByUrl">
                       Order
                     </el-button>
@@ -324,6 +325,7 @@
             inputUrlForm: {
               url: null
             },
+            isOrderByUrlLoading: false,
             isListLoading: false,
             nowPlaying: null,
             playList: []
@@ -388,9 +390,11 @@
               .orderItem(itemResource)
           },
           orderByUrl() {
+            this.isOrderByUrlLoading = true
             var url = this.inputUrlForm.url
             google.script.run
               .withSuccessHandler(function (itemResource) {
+                this.isOrderByUrlLoading = false
                 this.onOrderSuccess(itemResource, -1)
               }.bind(this))
               .orderByUrl(url)
