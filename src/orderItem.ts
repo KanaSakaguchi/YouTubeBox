@@ -47,6 +47,11 @@ function getOrders(): ItemResource[] {
     .map((order: Array<string>): ItemResource => JSON.parse(order[0]))
 }
 
+function getFirstOrder(): ItemResource {
+  const sheet: Sheet = getSheet_()
+  return JSON.parse(sheet.getSheetValues(2,  1,  1, 1)[0][0])
+}
+
 function deleteOrder(target: ItemResource): ItemResource {
   const sheet = getSheet_()
   const list = sheet.getSheetValues(2,  1,  sheet.getLastRow() - 1, 1)

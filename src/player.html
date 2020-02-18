@@ -37,6 +37,15 @@
           height: '360',
           width: '640'
         })
+        loadVideo()
+      }
+
+      function loadVideo() {
+        google.script.run
+          .withSuccessHandler(function (video) {
+            player.loadVideoById(video.videoId)
+          })
+          .getFirstOrder()
       }
     </script>
     <script src="https://www.youtube.com/iframe_api"></script>
