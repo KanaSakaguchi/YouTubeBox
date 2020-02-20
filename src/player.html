@@ -16,6 +16,8 @@
         <el-main>
           <section>
             <h2>Player</h2>
+            <div id="player">
+            </div>
           </section>
         </el-main>
       </el-container>
@@ -27,6 +29,15 @@
       new Vue({
         el: '#app',
       })
+
+      var player
+
+      function onYouTubeIframeAPIReady() {
+        player = new YT.Player('player', {
+          height: '360',
+          width: '640'
+        })
+      }
     </script>
     <script src="https://www.youtube.com/iframe_api"></script>
   </body>
