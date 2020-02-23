@@ -52,6 +52,10 @@ function getFirstOrder(): ItemResource {
   return JSON.parse(sheet.getSheetValues(2,  1,  1, 1)[0][0])
 }
 
+function existNextVideo() {
+  return  getOrders().length > 1
+}
+
 function deleteOrder(target: ItemResource): ItemResource {
   const sheet = getSheet_()
   const list = sheet.getSheetValues(2,  1,  sheet.getLastRow() - 1, 1)
