@@ -44,6 +44,7 @@
         google.script.run
           .withSuccessHandler(function (video) {
             player.loadVideoById(video.videoId)
+            player.stopVideo()
           })
           .getFirstOrder()
       }
