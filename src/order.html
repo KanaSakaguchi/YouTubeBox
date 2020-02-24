@@ -50,6 +50,7 @@
                   Order by {{nowPlaying.orderUser}}
                 </el-col>
               </el-row>
+              <template v-else>No ordered.</template>
             </div>
           </section>
 
@@ -247,6 +248,7 @@
             <div v-loading="isListLoading">
               <el-table
                   :data="playList"
+                  empty-text="No ordered."
                   style="width: 100%"
                   :show-header="false"
                   stripe>

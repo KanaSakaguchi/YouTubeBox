@@ -40,6 +40,9 @@ function orderPlaylist_(playlist: ItemResource) {
 
 function getOrders(): ItemResource[] {
   const sheet: Sheet = getSheet_()
+  if (sheet.getLastRow() === 1) {
+    return []
+  }
   return sheet.getSheetValues(2,  1,  sheet.getLastRow() - 1, 1)
     .map((order: Array<string>): ItemResource => JSON.parse(order[0]))
 }
