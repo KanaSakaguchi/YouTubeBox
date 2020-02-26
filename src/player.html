@@ -31,6 +31,7 @@
       })
 
       var player
+      var playingVideo
 
       function onYouTubeIframeAPIReady() {
         player = new YT.Player('player', {
@@ -46,6 +47,7 @@
       function loadVideo() {
         google.script.run
           .withSuccessHandler(function (video) {
+            playingVideo = video
             player.loadVideoById(video.videoId)
             player.stopVideo()
           })
@@ -59,7 +61,10 @@
 
         google.script.run
           .withSuccessHandler(function (existNextVideo) {
-            console.log(existNextVideo)
+            if (existNextVideo) {
+              google.script.run
+                .deleteOrder(playingVideo)
+            }
           })
           .existNextVideo()
       }
