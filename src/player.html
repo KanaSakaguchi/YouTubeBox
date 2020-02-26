@@ -41,15 +41,17 @@
             onStateChange: onPlayerStateChange
           }
         })
-        loadVideo()
+        loadVideo(false)
       }
 
-      function loadVideo() {
+      function loadVideo(isAutoPlay) {
         google.script.run
           .withSuccessHandler(function (video) {
             playingVideo = video
             player.loadVideoById(video.videoId)
-            player.stopVideo()
+            if (!isAutoPlay) {
+              player.stopVideo()
+            }
           })
           .getFirstOrder()
       }
@@ -63,6 +65,9 @@
           .withSuccessHandler(function (existNextVideo) {
             if (existNextVideo) {
               google.script.run
+                .withSuccessHandler(function () {
+                  loadVideo(true)
+                })
                 .deleteOrder(playingVideo)
             }
           })
