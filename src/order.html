@@ -318,6 +318,10 @@
               .withSuccessHandler(function () {
                 this.onOrderSuccess(itemResource, index)
               }.bind(this))
+              .withFailureHandler(function (error) {
+                console.error(error)
+                this.onOrderFailed(error, itemResource, index)
+              }.bind(this))
               .orderItem(itemResource)
           },
           onOrderSuccess(itemResource, index) {
@@ -328,6 +332,24 @@
             })
             itemResource.isOrdering = false
             itemResource.isOrdered = true
+            Vue.set(this.searchResult.list, index, itemResource)
+            this.getOrders()
+          },
+          onOrderFailed(error, itemResource, index) {
+            this.$notify({
+              type: 'error',
+              title: 'Order Failed...',
+              message: this.$createElement('div',
+                [
+                  this.$createElement('span', null, itemResource.title),
+                  this.$createElement('br', null, null),
+                  this.$createElement('br', null, null),
+                  this.$createElement('span', null, error.message),
+                ]
+              )
+            })
+            itemResource.isOrdering = false
+            itemResource.isOrdered = false
             Vue.set(this.searchResult.list, index, itemResource)
             this.getOrders()
           }
