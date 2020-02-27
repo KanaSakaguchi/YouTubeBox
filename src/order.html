@@ -375,6 +375,9 @@
               .withSuccessHandler(function () {
                 this.onDeleteSuccess(videoResource)
               }.bind(this))
+              .withFailureHandler(function (error) {
+                this.onDeleteFailed(error, videoResource)
+              }.bind(this))
               .deleteOrder(videoResource)
           },
           onDeleteSuccess(videoResource) {
@@ -382,6 +385,21 @@
               title: 'Delete Success!',
               message: videoResource.title,
               type: 'success'
+            })
+            this.getOrders()
+          },
+          onDeleteFailed(error, videoResource) {
+            this.$notify({
+              type: 'error',
+              title: 'Delete Order Failed...',
+              message: this.$createElement('div',
+                [
+                  this.$createElement('span', null, videoResource.title),
+                  this.$createElement('br', null, null),
+                  this.$createElement('br', null, null),
+                  this.$createElement('span', null, error.message),
+                ]
+              )
             })
             this.getOrders()
           }
