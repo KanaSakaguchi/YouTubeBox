@@ -17,6 +17,9 @@
           <section>
             <h2>Player</h2>
             <div id="player">
+              No video.<br>
+              Please order.<br>
+              <el-button type="primary" icon="el-icon-edit-outline" @click="goToOrder">Order YouTube</el-button>
             </div>
           </section>
         </el-main>
@@ -28,6 +31,11 @@
     <script>
       new Vue({
         el: '#app',
+        methods: {
+          goToOrder: function () {
+            window.top.location.href = 'https://script.google.com/a/sencorp.co.jp/macros/s/AKfycbz8prUb24qGdsVgBK6K-FKmG0Er1NFOXSm6KhScyk6Xh0Q9s9qC/exec/list'
+          }
+        }
       })
 
       var player
@@ -52,6 +60,9 @@
             if (!isAutoPlay) {
               player.stopVideo()
             }
+          })
+          .withFailureHandler(function (error) {
+            player.destroy()
           })
           .getFirstOrder()
       }
