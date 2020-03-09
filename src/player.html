@@ -15,7 +15,9 @@
         </el-header>
         <el-main>
           <section>
-            <h2>Player</h2>
+            <h2 style="display:inline-block">Player</h2>
+            <el-button @click="playNextVideo">Next Video <i class="el-icon-arrow-right"></i></el-button>
+            <br>
             <div id="player">
               No video.<br>
               Please order.<br>
@@ -32,6 +34,7 @@
       new Vue({
         el: '#app',
         methods: {
+          playNextVideo: playNextVideo,
           goToOrder: function () {
             window.top.location.href = 'https://script.google.com/a/sencorp.co.jp/macros/s/AKfycbz8prUb24qGdsVgBK6K-FKmG0Er1NFOXSm6KhScyk6Xh0Q9s9qC/exec/list'
           }
@@ -72,6 +75,10 @@
           return
         }
 
+        playNextVideo()
+      }
+
+      function playNextVideo () {
         google.script.run
           .withSuccessHandler(function (existNextVideo) {
             if (existNextVideo) {
