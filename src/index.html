@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
+    <base target="_top">
+  </head>
+  <body>
+    <div id="app">
+      <el-container>
+        <el-header>
+          <div>
+            <h1>YouTube Box</h1>
+          </div>
+        </el-header>
+        <el-main>
+          <section>
+            <el-button type="primary" icon="el-icon-caret-right" @click="goToPlayer">Play YouTube</el-button>
+            <el-button type="primary" icon="el-icon-edit-outline" @click="goToOrder">Order YouTube</el-button>
+          </section>
+        </el-main>
+      </el-container>
+    </div>
+
+    <script src="https://unpkg.com/vue/dist/vue.js"></script>
+    <script src="https://unpkg.com/element-ui/lib/index.js"></script>
+    <script>
+      new Vue({
+        el: '#app',
+        methods: {
+          goToPlayer: function () {
+            window.top.location.href = 'https://script.google.com/a/sencorp.co.jp/macros/s/AKfycbz8prUb24qGdsVgBK6K-FKmG0Er1NFOXSm6KhScyk6Xh0Q9s9qC/exec/player'
+          },
+          goToOrder: function () {
+            window.top.location.href = 'https://script.google.com/a/sencorp.co.jp/macros/s/AKfycbz8prUb24qGdsVgBK6K-FKmG0Er1NFOXSm6KhScyk6Xh0Q9s9qC/exec/order'
+          }
+        }
+      })
+    </script>
+  </body>
+</html>
