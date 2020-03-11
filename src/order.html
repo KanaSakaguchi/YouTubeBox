@@ -401,7 +401,6 @@
                 this.onOrderSuccess(itemResource, index)
               }.bind(this))
               .withFailureHandler(function (error) {
-                console.error(error)
                 this.onOrderFailed(error, itemResource, index)
               }.bind(this))
               .orderItem(itemResource)
