@@ -9,6 +9,10 @@ function getSheet_(): Sheet {
 }
 
 function orderByUrl(url: string): ItemResource {
+  if (!url.match(/https:\/\/www\.youtube\.com\/(watch\?v=|playlist\?list=).+/)) {
+    throw new Error('Invalid URL')
+  }
+
   const videoId: string = url.match(/https:\/\/www\.youtube\.com\/watch\?v=(.*)/)[1];
   const videoResource = getVideoResource(videoId)
   orderVideo_(videoResource)
