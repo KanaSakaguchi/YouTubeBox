@@ -20,7 +20,7 @@ function orderByUrl(url: string): ItemResource {
     return playlistResource
   }
 
-  const videoId: string = url.match(/https:\/\/www\.youtube\.com\/watch\?v=(.*)/)[1];
+  const videoId: string = url.match(/v=([0-9A-Za-z\-]+)/)[1]
   const videoResource = getVideoResource(videoId)
   orderVideo_(videoResource)
   return videoResource
