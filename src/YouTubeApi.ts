@@ -64,7 +64,7 @@ export function getPlaylistResource(playlistId: string): ItemResource {
     id: playlistId
   }).items[0]
   if (!playlist) {
-    throw new Error('Failed to get play list resource.')
+    throw new Error('Failed to get playlist resource. ' + playlistId)
   }
 
   return extractPlaylistResource_(playlist)
