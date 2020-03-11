@@ -59,7 +59,7 @@ export function getVideoResource(videoId: string): ItemResource {
   return extractVideoResource_(video)
 }
 
-function getPlaylistResource(playlistId: string): ItemResource {
+export function getPlaylistResource(playlistId: string): ItemResource {
   const playlist = YouTube.Playlists.list('id,snippet,contentDetails,status', {
     id: playlistId
   }).items[0]

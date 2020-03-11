@@ -1,7 +1,7 @@
 import Sheet = GoogleAppsScript.Spreadsheet.Sheet;
 import Spreadsheet = GoogleAppsScript.Spreadsheet.Spreadsheet;
 import { ItemResource, ItemType } from "./extractItemResource";
-import { getPlaylistVideos_, getVideoResource } from "./YouTubeApi";
+import { getPlaylistVideos_, getPlaylistResource, getVideoResource } from "./YouTubeApi";
 
 function getSheet_(): Sheet {
   const ss: Spreadsheet = SpreadsheetApp.openByUrl(PropertiesService.getScriptProperties().getProperty('sheet'))
@@ -11,6 +11,13 @@ function getSheet_(): Sheet {
 function orderByUrl(url: string): ItemResource {
   if (!url.match(/https:\/\/www\.youtube\.com\/(watch\?v=|playlist\?list=).+/)) {
     throw new Error('Invalid URL')
+  }
+
+  if (url.indexOf('list') !== -1) {
+    const playListId = url.match(/list=([0-9A-Za-z\-]+)/)[1]
+    const playlistResource = getPlaylistResource(playListId)
+    orderPlaylist_(playlistResource)
+    return playlistResource
   }
 
   const videoId: string = url.match(/https:\/\/www\.youtube\.com\/watch\?v=(.*)/)[1];
