@@ -418,6 +418,9 @@
                   this.isOrderByUrlLoading = false
                   this.onOrderSuccess(itemResource, -1)
                 }.bind(this))
+                .withFailureHandler(function (error) {
+                  this.onOrderFailed(error, url, -1)
+                }.bind(this))
                 .orderByUrl(url)
             })
           },
@@ -449,9 +452,11 @@
                 ]
               )
             })
-            itemResource.isOrdering = false
-            itemResource.isOrdered = false
-            Vue.set(this.searchResult.list, index, itemResource)
+            if (index !== -1) {
+              itemResource.isOrdering = false
+              itemResource.isOrdered = false
+              Vue.set(this.searchResult.list, index, itemResource)
+            }
             this.getOrders()
           },
           deleteOrder(videoResource, index) {
